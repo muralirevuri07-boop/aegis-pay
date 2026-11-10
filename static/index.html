@@ -5,7 +5,7 @@
 <style>
 :root{--bg:#f3f5f9;--pn:#fff;--ln:#dde3ec;--tx:#162033;--mu:#5a6a82;--nv:#0e1a2e;--ac:#1d4ed8;--ok:#047857;--wn:#b45309;--bd:#b91c1c}
 *{box-sizing:border-box}body{margin:0;font:14px/1.5 Inter,system-ui,"Segoe UI",Arial,sans-serif;background:var(--bg);color:var(--tx);display:flex;min-height:100vh}
-nav{width:244px;background:var(--nv);color:#c5d0e3;padding:20px 12px;flex:none}
+nav{width:244px;background:var(--nv);color:#c5d0e3;padding:20px 12px;flex:none;position:sticky;top:0;height:100vh;align-self:flex-start;overflow-y:auto}
 .br0{padding:0 10px 16px;border-bottom:1px solid #22344f;margin-bottom:12px}.br0 b{display:block;color:#fff;font-size:17px}.br0 span{font-size:12px;color:#8fa2c0}
 nav a{display:block;padding:9px 12px;border-radius:8px;color:#c5d0e3;text-decoration:none;font-size:13.5px;margin-bottom:2px}
 nav a:hover{background:#17273f}nav a[aria-current=page]{background:#223654;color:#fff}
@@ -30,7 +30,7 @@ input,select{font:inherit;padding:9px 11px;border:1px solid #c3ccda;border-radiu
 .dl{display:grid;grid-template-columns:170px 1fr;gap:6px 14px;font-size:13px;margin:0}.dl dt{color:var(--mu)}.dl dd{margin:0;word-break:break-word}
 .al2{padding:11px 14px;border-radius:8px;margin-bottom:14px;font-weight:600}.al2.ok{background:#d9f3e9;color:var(--ok)}.al2.bad{background:#fbe0e0;color:var(--bd)}
 .two{display:grid;grid-template-columns:1fr 1fr;gap:16px}.mono{font-family:ui-monospace,Consolas,monospace;font-size:12px}
-@media(max-width:860px){body{display:block}nav{width:auto;display:flex;overflow-x:auto;gap:4px;padding:10px}.br0{display:none}nav a{white-space:nowrap}main{padding:16px}.two{grid-template-columns:1fr}.dl{grid-template-columns:1fr}.bar{grid-template-columns:110px 1fr 30px}}
+@media(max-width:860px){body{display:block}nav{width:auto;display:flex;overflow-x:auto;gap:4px;padding:10px;position:static;height:auto}.br0{display:none}nav a{white-space:nowrap}main{padding:16px}.two{grid-template-columns:1fr}.dl{grid-template-columns:1fr}.bar{grid-template-columns:110px 1fr 30px}}
 @media(prefers-reduced-motion:no-preference){.pn{transition:box-shadow .15s}.pn:hover{box-shadow:0 2px 10px rgba(20,32,51,.06)}}
 </style></head><body>
 <nav aria-label="Primary" id="nav"></nav><main id="main" aria-live="polite"><p>Loading...</p></main>
@@ -122,3 +122,4 @@ async function send(e){if(e)e.preventDefault();const m=$('#msg').value.trim();if
 async function act(id,a){const r=await fetch('/api/purchases/'+id+'/'+a,{method:'POST'});const d=await r.json();if(r.ok)cur=d;await load()}
 addEventListener('hashchange',draw);load();
 </script></body></html>
+

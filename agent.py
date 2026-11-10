@@ -11,7 +11,7 @@ def build_cart(message):
         "You are a shopping agent. Choose items ONLY from the catalog to satisfy the request. "
         'Reply with JSON only: {"items":[{"id":"desk","qty":1}],"message":"one short friendly sentence"}. '
         "If nothing in the catalog fits, return an empty items list. "
-        "Do not apply budgets or safety rules yourself; a separate policy engine checks the cart.\n\nCATALOG:\n" + lines
+        "The message must only describe the proposed cart. Never say the order is placed, paid, shipped or on its way. Do not apply budgets or safety rules yourself; a separate policy engine checks the cart.\n\nCATALOG:\n" + lines
     )
     resp = client.chat.completions.create(
         model=MODEL, temperature=0.2,
@@ -26,3 +26,4 @@ def build_cart(message):
             qty = max(1, min(int(it.get("qty", 1) or 1), 10))
             cart.append({**p, "qty": qty})
     return {"cart": cart, "message": data.get("message", "")}
+
