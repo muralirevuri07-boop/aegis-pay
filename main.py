@@ -148,3 +148,13 @@ async def config():
         "spent_today": db.spent_today(),
         "server_time_utc": db.now(),
     }
+
+@app.post("/api/demo")
+async def demo():
+    out = []
+    for m in ["Order a standing desk", "Get me a $100 gift card", "Furnish my office: desk, chair and monitor"]:
+        try:
+            out.append(await chat(Chat(message=m)))
+        except HTTPException as e:
+            out.append({"request": m, "error": str(e.detail)})
+    return out

@@ -73,7 +73,7 @@ agents(){
 tx(){
  const ex=['Order a standing desk','Buy a keyboard and a mouse','Get me a $100 gift card','Furnish my office: desk, chair and monitor'];
  return hd('Transaction Management','Submit a purchase request and follow it through policy, approval and PayPal')+
- pn('New purchase request',`<form class="fr" onsubmit="send(event)"><label class="sr" for="msg" style="position:absolute;left:-9999px">Purchase request</label><input id="msg" placeholder="Describe what the agent should purchase" autocomplete="off"><button id="go" type="submit">Submit request</button></form><div class="ex">${ex.map(e=>`<button class="al sm" onclick="quick(this)">${E(e)}</button>`).join('')}</div>`)+
+ pn('New purchase request',`<form class="fr" onsubmit="send(event)"><label class="sr" for="msg" style="position:absolute;left:-9999px">Purchase request</label><input id="msg" placeholder="Describe what the agent should purchase" autocomplete="off"><button id="go" type="submit">Submit request</button></form><div style="margin-top:10px"><button class="al sm" onclick="demo(this)">Run sample scenarios (3 real requests)</button></div><div class="ex">${ex.map(e=>`<button class="al sm" onclick="quick(this)">${E(e)}</button>`).join('')}</div>`)+
  (cur?detail(cur):'')+pn('Transactions',txt(P,'No transactions yet. Submit a request above.'));},
 policy(){
  const p=C.policy;
@@ -120,6 +120,7 @@ async function send(e){if(e)e.preventDefault();const m=$('#msg').value.trim();if
  catch(x){cur={id:'-',request:m,agent_message:String(x),verdict:'none',status:'error',items:[],reasons:[]}}
  await load()}
 async function act(id,a){const r=await fetch('/api/purchases/'+id+'/'+a,{method:'POST'});const d=await r.json();if(r.ok)cur=d;await load()}
+async function demo(b){b.disabled=true;b.textContent='Running 3 requests...';try{await fetch('/api/demo',{method:'POST'})}catch(e){}await load()}
 addEventListener('hashchange',draw);load();
 </script></body></html>
 
