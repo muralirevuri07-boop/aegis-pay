@@ -1,0 +1,84 @@
+﻿<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Aegis Pay</title>
+<style>
+:root{--bg:#0b1020;--card:#141b30;--line:#26304d;--text:#e8ecf8;--mut:#8a95b5;--ok:#2ecc8f;--warn:#f5b83d;--bad:#ef5b6b;--acc:#6c8cff}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font-family:system-ui,Segoe UI,Arial,sans-serif}
+.wrap{max-width:900px;margin:0 auto;padding:24px 16px 60px}
+h1{margin:0;font-size:28px}.sub{color:var(--mut);margin:4px 0 18px}
+.rules{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:18px}
+.rules span{background:var(--card);border:1px solid var(--line);border-radius:999px;padding:5px 12px;font-size:12px;color:var(--mut)}
+.box{display:flex;gap:8px}input{flex:1;padding:13px;border-radius:10px;border:1px solid var(--line);background:var(--card);color:var(--text);font-size:15px}
+button,.btn{background:var(--acc);color:#fff;border:0;border-radius:10px;padding:12px 18px;font-size:14px;cursor:pointer;text-decoration:none;display:inline-block}
+button:disabled{opacity:.5}button.alt{background:transparent;border:1px solid var(--line);color:var(--text)}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0 18px}.chips button{background:var(--card);border:1px solid var(--line);font-size:12px;padding:6px 12px;color:var(--mut)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px;margin-bottom:18px}
+.badge{display:inline-block;padding:3px 10px;border-radius:999px;font-size:12px;font-weight:600}
+.ok{background:#12372b;color:var(--ok)}.warn{background:#3d3112;color:var(--warn)}.bad{background:#3d1a20;color:var(--bad)}.mut{background:#222a43;color:var(--mut)}
+.row{display:flex;justify-content:space-between;gap:12px;padding:5px 0;border-bottom:1px solid var(--line);font-size:14px}
+.total{font-size:20px;font-weight:700;margin:10px 0}
+h2{font-size:15px;color:var(--mut);margin:26px 0 8px;text-transform:uppercase;letter-spacing:.06em}
+table{width:100%;border-collapse:collapse;font-size:13px}th,td{text-align:left;padding:7px 6px;border-bottom:1px solid var(--line);vertical-align:top}th{color:var(--mut);font-weight:500}
+.banner{background:#12372b;color:var(--ok);border-radius:10px;padding:12px;margin-bottom:14px}.banner.err{background:#3d1a20;color:var(--bad)}
+ul{margin:6px 0 10px;padding-left:18px;color:var(--mut);font-size:13px}.actions{display:flex;gap:8px;margin-top:10px}
+.scroll{overflow-x:auto}
+</style></head><body><div class="wrap">
+<h1>Aegis Pay</h1>
+<div class="sub">Governed agentic commerce: an AI agent shops, a policy engine decides, a human approves, PayPal pays.</div>
+<div class="rules"><span>Max order $500</span><span>Human approval above $150</span><span>Daily budget $800</span><span>Blocked: gift cards, crypto, weapons</span></div>
+<div id="banner"></div>
+<div class="box"><input id="msg" placeholder="e.g. Order a standing desk for my home office" autocomplete="off"><button id="go">Ask agent</button></div>
+<div class="chips" id="chips"></div>
+<div id="current"></div>
+<h2>Purchases</h2><div class="scroll"><table><thead><tr><th>#</th><th>Request</th><th>Total</th><th>Policy</th><th>Status</th></tr></thead><tbody id="hist"></tbody></table></div>
+<h2>Audit log</h2><div class="scroll"><table><thead><tr><th>Time (UTC)</th><th>#</th><th>Event</th><th>Detail</th></tr></thead><tbody id="audit"></tbody></table></div>
+</div>
+<script>
+const $=s=>document.querySelector(s);
+const esc=s=>String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const money=n=>'$'+Number(n).toFixed(2);
+const label={allow:'Auto-approved',needs_approval:'Needs approval',deny:'Denied',none:'No match'};
+const cls={allow:'ok',needs_approval:'warn',deny:'bad',none:'mut'};
+const st={pending_approval:'Waiting for human approval',awaiting_payment:'Ready to pay',paid:'Paid',denied:'Blocked by policy',rejected:'Rejected by human',cancelled:'Cancelled',failed:'Failed',no_match:'No match',error:'Error',new:'New'};
+const examples=['Order a standing desk','Buy a keyboard and a mouse','Get me a $100 gift card','Furnish my office: desk, chair and monitor'];
+$('#chips').innerHTML=examples.map(e=>`<button data-q="${esc(e)}">${esc(e)}</button>`).join('');
+$('#chips').onclick=e=>{if(e.target.dataset.q){$('#msg').value=e.target.dataset.q;send();}};
+function render(p){
+  let h='<div class="card">';
+  h+=`<div><span class="badge ${cls[p.verdict]||'mut'}">${label[p.verdict]||esc(p.status)}</span> <span style="color:var(--mut);font-size:13px">Request #${p.id}: ${esc(p.request)}</span></div>`;
+  if(p.agent_message)h+=`<p>${esc(p.agent_message)}</p>`;
+  (p.items||[]).forEach(i=>{h+=`<div class="row"><span>${i.qty} x ${esc(i.name)} <span style="color:var(--mut)">(${esc(i.category)})</span></span><span>${money(i.price*i.qty)}</span></div>`});
+  if(p.items&&p.items.length)h+=`<div class="total">${money(p.total)}</div>`;
+  if(p.reasons&&p.reasons.length)h+='<ul>'+p.reasons.map(r=>`<li>${esc(r)}</li>`).join('')+'</ul>';
+  h+=`<div style="color:var(--mut);font-size:13px">Status: ${esc(st[p.status]||p.status)}</div>`;
+  if(p.status==='pending_approval')h+=`<div class="actions"><button onclick="act(${p.id},'approve')">Approve purchase</button><button class="alt" onclick="act(${p.id},'reject')">Reject</button></div>`;
+  if(p.status==='awaiting_payment'&&p.approve_url)h+=`<div class="actions"><a class="btn" href="${esc(p.approve_url)}">Pay with PayPal (sandbox)</a></div>`;
+  $('#current').innerHTML=h+'</div>';
+}
+async function load(){
+  const [ps,au]=await Promise.all([fetch('/api/purchases').then(r=>r.json()),fetch('/api/audit').then(r=>r.json())]);
+  $('#hist').innerHTML=ps.map(p=>`<tr><td>${p.id}</td><td>${esc(p.request)}</td><td>${p.total?money(p.total):'-'}</td><td><span class="badge ${cls[p.verdict]||'mut'}">${label[p.verdict]||'-'}</span></td><td>${esc(st[p.status]||p.status)}</td></tr>`).join('');
+  $('#audit').innerHTML=au.map(a=>`<tr><td>${esc(a.ts)}</td><td>${a.purchase_id}</td><td>${esc(a.event)}</td><td>${esc(a.detail)}</td></tr>`).join('');
+}
+async function send(){
+  const m=$('#msg').value.trim();if(!m)return;
+  $('#go').disabled=true;$('#go').textContent='Thinking...';
+  try{
+    const r=await fetch('/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({message:m})});
+    const d=await r.json();
+    if(!r.ok){$('#current').innerHTML='<div class="card"><span class="badge bad">Error</span><p>'+esc(d.detail)+'</p></div>';}
+    else render(d);
+  }catch(e){$('#current').innerHTML='<div class="card"><span class="badge bad">Error</span><p>'+esc(e)+'</p></div>';}
+  $('#go').disabled=false;$('#go').textContent='Ask agent';load();
+}
+async function act(id,a){
+  const r=await fetch(`/api/purchases/${id}/${a}`,{method:'POST'});
+  const d=await r.json();if(r.ok)render(d);load();
+}
+$('#go').onclick=send;$('#msg').addEventListener('keydown',e=>{if(e.key==='Enter')send();});
+const q=new URLSearchParams(location.search);
+if(q.get('paid'))$('#banner').innerHTML='<div class="banner">Payment captured through PayPal for request #'+esc(q.get('paid'))+'.</div>';
+else if(q.get('msg'))$('#banner').innerHTML='<div class="banner err">'+esc(q.get('msg'))+'</div>';
+load();
+</script></body></html>
