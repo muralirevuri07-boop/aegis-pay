@@ -132,3 +132,19 @@ async def paypal_cancel(token: str = ""):
 @app.get("/")
 async def home():
     return FileResponse("static/index.html")
+
+import catalog
+
+@app.get("/api/config")
+async def config():
+    return {
+        "policy": {"max_order": policy.MAX_ORDER, "approval_threshold": policy.APPROVAL_THRESHOLD,
+                   "daily_budget": policy.DAILY_BUDGET, "blocked_categories": sorted(policy.BLOCKED_CATEGORIES)},
+        "agent": {"provider": "Groq", "model": agent.MODEL},
+        "catalog": catalog.CATALOG,
+        "payments": {"provider": "PayPal", "environment": "Sandbox" if "sandbox" in (BASE or "") else "Live",
+                     "currency": "USD", "paypal_configured": bool(CID and SECRET),
+                     "llm_configured": bool(os.getenv("GROQ_API_KEY"))},
+        "spent_today": db.spent_today(),
+        "server_time_utc": db.now(),
+    }

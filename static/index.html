@@ -1,84 +1,124 @@
 ﻿<!doctype html>
 <html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Aegis Pay</title>
+<title>Aegis Pay | Commerce Governance Platform</title>
 <style>
-:root{--bg:#0b1020;--card:#141b30;--line:#26304d;--text:#e8ecf8;--mut:#8a95b5;--ok:#2ecc8f;--warn:#f5b83d;--bad:#ef5b6b;--acc:#6c8cff}
-*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font-family:system-ui,Segoe UI,Arial,sans-serif}
-.wrap{max-width:900px;margin:0 auto;padding:24px 16px 60px}
-h1{margin:0;font-size:28px}.sub{color:var(--mut);margin:4px 0 18px}
-.rules{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:18px}
-.rules span{background:var(--card);border:1px solid var(--line);border-radius:999px;padding:5px 12px;font-size:12px;color:var(--mut)}
-.box{display:flex;gap:8px}input{flex:1;padding:13px;border-radius:10px;border:1px solid var(--line);background:var(--card);color:var(--text);font-size:15px}
-button,.btn{background:var(--acc);color:#fff;border:0;border-radius:10px;padding:12px 18px;font-size:14px;cursor:pointer;text-decoration:none;display:inline-block}
-button:disabled{opacity:.5}button.alt{background:transparent;border:1px solid var(--line);color:var(--text)}
-.chips{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0 18px}.chips button{background:var(--card);border:1px solid var(--line);font-size:12px;padding:6px 12px;color:var(--mut)}
-.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px;margin-bottom:18px}
-.badge{display:inline-block;padding:3px 10px;border-radius:999px;font-size:12px;font-weight:600}
-.ok{background:#12372b;color:var(--ok)}.warn{background:#3d3112;color:var(--warn)}.bad{background:#3d1a20;color:var(--bad)}.mut{background:#222a43;color:var(--mut)}
-.row{display:flex;justify-content:space-between;gap:12px;padding:5px 0;border-bottom:1px solid var(--line);font-size:14px}
-.total{font-size:20px;font-weight:700;margin:10px 0}
-h2{font-size:15px;color:var(--mut);margin:26px 0 8px;text-transform:uppercase;letter-spacing:.06em}
-table{width:100%;border-collapse:collapse;font-size:13px}th,td{text-align:left;padding:7px 6px;border-bottom:1px solid var(--line);vertical-align:top}th{color:var(--mut);font-weight:500}
-.banner{background:#12372b;color:var(--ok);border-radius:10px;padding:12px;margin-bottom:14px}.banner.err{background:#3d1a20;color:var(--bad)}
-ul{margin:6px 0 10px;padding-left:18px;color:var(--mut);font-size:13px}.actions{display:flex;gap:8px;margin-top:10px}
-.scroll{overflow-x:auto}
-</style></head><body><div class="wrap">
-<h1>Aegis Pay</h1>
-<div class="sub">Governed agentic commerce: an AI agent shops, a policy engine decides, a human approves, PayPal pays.</div>
-<div class="rules"><span>Max order $500</span><span>Human approval above $150</span><span>Daily budget $800</span><span>Blocked: gift cards, crypto, weapons</span></div>
-<div id="banner"></div>
-<div class="box"><input id="msg" placeholder="e.g. Order a standing desk for my home office" autocomplete="off"><button id="go">Ask agent</button></div>
-<div class="chips" id="chips"></div>
-<div id="current"></div>
-<h2>Purchases</h2><div class="scroll"><table><thead><tr><th>#</th><th>Request</th><th>Total</th><th>Policy</th><th>Status</th></tr></thead><tbody id="hist"></tbody></table></div>
-<h2>Audit log</h2><div class="scroll"><table><thead><tr><th>Time (UTC)</th><th>#</th><th>Event</th><th>Detail</th></tr></thead><tbody id="audit"></tbody></table></div>
-</div>
+:root{--bg:#f3f5f9;--pn:#fff;--ln:#dde3ec;--tx:#162033;--mu:#5a6a82;--nv:#0e1a2e;--ac:#1d4ed8;--ok:#047857;--wn:#b45309;--bd:#b91c1c}
+*{box-sizing:border-box}body{margin:0;font:14px/1.5 Inter,system-ui,"Segoe UI",Arial,sans-serif;background:var(--bg);color:var(--tx);display:flex;min-height:100vh}
+nav{width:244px;background:var(--nv);color:#c5d0e3;padding:20px 12px;flex:none}
+.br0{padding:0 10px 16px;border-bottom:1px solid #22344f;margin-bottom:12px}.br0 b{display:block;color:#fff;font-size:17px}.br0 span{font-size:12px;color:#8fa2c0}
+nav a{display:block;padding:9px 12px;border-radius:8px;color:#c5d0e3;text-decoration:none;font-size:13.5px;margin-bottom:2px}
+nav a:hover{background:#17273f}nav a[aria-current=page]{background:#223654;color:#fff}
+nav a i{float:right;font-style:normal;background:#b45309;color:#fff;border-radius:99px;padding:0 7px;font-size:11px}
+main{flex:1;min-width:0;padding:26px 30px;max-width:1180px}
+a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid var(--ac);outline-offset:2px}
+.ph h2{margin:0;font-size:22px;letter-spacing:-.01em}.ph p{margin:2px 0 18px;color:var(--mu)}
+.pn{background:var(--pn);border:1px solid var(--ln);border-radius:10px;padding:16px 18px;margin-bottom:16px}
+.pn h3{margin:0 0 12px;font-size:12px;text-transform:uppercase;letter-spacing:.07em;color:var(--mu)}
+.kg{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:14px;margin-bottom:16px}
+.k{background:var(--pn);border:1px solid var(--ln);border-radius:10px;padding:14px 16px}.kl{font-size:12px;color:var(--mu)}.kv{font-size:26px;font-weight:650;margin:2px 0}.ks{font-size:12px;color:var(--mu)}
+table{width:100%;border-collapse:collapse;font-size:13px}th,td{text-align:left;padding:9px 8px;border-bottom:1px solid var(--ln);vertical-align:top}th{font-weight:600;color:var(--mu);font-size:12px;white-space:nowrap}
+.sc{overflow-x:auto}.em{padding:22px;text-align:center;color:var(--mu);border:1px dashed var(--ln);border-radius:8px}
+.b{display:inline-block;padding:2px 9px;border-radius:99px;font-size:12px;font-weight:600;white-space:nowrap}
+.b.ok{background:#d9f3e9;color:var(--ok)}.b.warn{background:#fdecd0;color:var(--wn)}.b.bad{background:#fbe0e0;color:var(--bd)}.b.mut{background:#e6ebf3;color:var(--mu)}
+button,.bt2{font:inherit;font-weight:600;background:var(--ac);color:#fff;border:1px solid var(--ac);border-radius:7px;padding:8px 14px;cursor:pointer;text-decoration:none;display:inline-block}
+button.al{background:#fff;color:var(--tx);border-color:var(--ln)}button.ok2{background:var(--ok);border-color:var(--ok)}button.sm{padding:4px 10px;font-size:12px}button:disabled{opacity:.55;cursor:wait}
+input,select{font:inherit;padding:9px 11px;border:1px solid #c3ccda;border-radius:7px;background:#fff;color:var(--tx)}
+.fr{display:flex;gap:8px;flex-wrap:wrap}.fr input{flex:1;min-width:220px}.ex{margin-top:10px;display:flex;gap:6px;flex-wrap:wrap}
+.mt{height:9px;background:#e6ebf3;border-radius:99px;overflow:hidden}.mt div{height:100%;background:var(--ac)}.ms{margin:6px 0 0;color:var(--mu);font-size:13px}
+.bar{display:grid;grid-template-columns:150px 1fr 36px;gap:10px;align-items:center;margin:7px 0;font-size:13px}.bt{height:10px;background:#e6ebf3;border-radius:4px}.bt div{height:100%;background:#3b5b9c;border-radius:4px}.bar b{text-align:right}
+.dl{display:grid;grid-template-columns:170px 1fr;gap:6px 14px;font-size:13px;margin:0}.dl dt{color:var(--mu)}.dl dd{margin:0;word-break:break-word}
+.al2{padding:11px 14px;border-radius:8px;margin-bottom:14px;font-weight:600}.al2.ok{background:#d9f3e9;color:var(--ok)}.al2.bad{background:#fbe0e0;color:var(--bd)}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:16px}.mono{font-family:ui-monospace,Consolas,monospace;font-size:12px}
+@media(max-width:860px){body{display:block}nav{width:auto;display:flex;overflow-x:auto;gap:4px;padding:10px}.br0{display:none}nav a{white-space:nowrap}main{padding:16px}.two{grid-template-columns:1fr}.dl{grid-template-columns:1fr}.bar{grid-template-columns:110px 1fr 30px}}
+@media(prefers-reduced-motion:no-preference){.pn{transition:box-shadow .15s}.pn:hover{box-shadow:0 2px 10px rgba(20,32,51,.06)}}
+</style></head><body>
+<nav aria-label="Primary" id="nav"></nav><main id="main" aria-live="polite"><p>Loading...</p></main>
 <script>
-const $=s=>document.querySelector(s);
-const esc=s=>String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
-const money=n=>'$'+Number(n).toFixed(2);
-const label={allow:'Auto-approved',needs_approval:'Needs approval',deny:'Denied',none:'No match'};
-const cls={allow:'ok',needs_approval:'warn',deny:'bad',none:'mut'};
-const st={pending_approval:'Waiting for human approval',awaiting_payment:'Ready to pay',paid:'Paid',denied:'Blocked by policy',rejected:'Rejected by human',cancelled:'Cancelled',failed:'Failed',no_match:'No match',error:'Error',new:'New'};
-const examples=['Order a standing desk','Buy a keyboard and a mouse','Get me a $100 gift card','Furnish my office: desk, chair and monitor'];
-$('#chips').innerHTML=examples.map(e=>`<button data-q="${esc(e)}">${esc(e)}</button>`).join('');
-$('#chips').onclick=e=>{if(e.target.dataset.q){$('#msg').value=e.target.dataset.q;send();}};
-function render(p){
-  let h='<div class="card">';
-  h+=`<div><span class="badge ${cls[p.verdict]||'mut'}">${label[p.verdict]||esc(p.status)}</span> <span style="color:var(--mut);font-size:13px">Request #${p.id}: ${esc(p.request)}</span></div>`;
-  if(p.agent_message)h+=`<p>${esc(p.agent_message)}</p>`;
-  (p.items||[]).forEach(i=>{h+=`<div class="row"><span>${i.qty} x ${esc(i.name)} <span style="color:var(--mut)">(${esc(i.category)})</span></span><span>${money(i.price*i.qty)}</span></div>`});
-  if(p.items&&p.items.length)h+=`<div class="total">${money(p.total)}</div>`;
-  if(p.reasons&&p.reasons.length)h+='<ul>'+p.reasons.map(r=>`<li>${esc(r)}</li>`).join('')+'</ul>';
-  h+=`<div style="color:var(--mut);font-size:13px">Status: ${esc(st[p.status]||p.status)}</div>`;
-  if(p.status==='pending_approval')h+=`<div class="actions"><button onclick="act(${p.id},'approve')">Approve purchase</button><button class="alt" onclick="act(${p.id},'reject')">Reject</button></div>`;
-  if(p.status==='awaiting_payment'&&p.approve_url)h+=`<div class="actions"><a class="btn" href="${esc(p.approve_url)}">Pay with PayPal (sandbox)</a></div>`;
-  $('#current').innerHTML=h+'</div>';
+const $=s=>document.querySelector(s),E=s=>String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const $m=n=>'$'+Number(n||0).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});
+const VD={allow:['Auto-approved','ok'],needs_approval:['Human review','warn'],deny:['Denied','bad'],none:['No match','mut']};
+const ST={pending_approval:'Awaiting approval',awaiting_payment:'Awaiting payment',paid:'Paid',denied:'Blocked by policy',rejected:'Rejected by reviewer',cancelled:'Cancelled by buyer',failed:'Failed',no_match:'No match',error:'Error',new:'New'};
+const NAV=[['overview','Executive Overview'],['agents','Agent Management'],['tx','Transaction Management'],['policy','Policy Administration'],['approvals','Approval Management'],['risk','Risk & Compliance'],['audit','Audit & Reporting'],['admin','System Administration']];
+let P=[],A=[],C=null,cur=null,err=null,F={e:'',q:''};
+const J=u=>fetch(u).then(r=>{if(!r.ok)throw new Error(u+' returned '+r.status);return r.json()});
+const bg=v=>{const x=VD[v]||['-','mut'];return `<span class="b ${x[1]}">${x[0]}</span>`};
+const hd=(t,s)=>`<header class="ph"><h2>${t}</h2><p>${s}</p></header>`,pn=(t,b)=>`<section class="pn"><h3>${t}</h3>${b}</section>`;
+const kp=(l,v,s)=>`<div class="k"><div class="kl">${l}</div><div class="kv">${v}</div><div class="ks">${s||''}</div></div>`;
+const tb=(h,r,e)=>r.length?`<div class="sc"><table><thead><tr>${h.map(x=>`<th scope="col">${x}</th>`).join('')}</tr></thead><tbody>${r.join('')}</tbody></table></div>`:`<div class="em">${e}</div>`;
+const bars=i=>{const m=Math.max(1,...i.map(x=>x[1]));return i.map(x=>`<div class="bar"><span>${x[0]}</span><div class="bt"><div style="width:${x[1]/m*100}%"></div></div><b>${x[1]}</b></div>`).join('')};
+const cat=r=>/Blocked category/.test(r)?'Blocked category':/exceeds max/.test(r)?'Over order limit':/Daily budget/.test(r)?'Daily budget':/auto-approve/.test(r)?'Above approval threshold':'Other';
+const rows=l=>l.map(p=>`<tr><td>#${p.id}</td><td>${E(p.created_at)}</td><td>${E(p.request)}</td><td>${p.total?$m(p.total):'-'}</td><td>${bg(p.verdict)}</td><td>${E(ST[p.status]||p.status)}</td><td class="mono">${E(p.order_id||'-')}</td><td><button class="al sm" onclick="view(${p.id})">View</button></td></tr>`);
+const TH=['ID','Created (UTC)','Request','Amount','Policy','Status','PayPal order',''];
+const txt=(l,e)=>tb(TH,rows(l),e);
+function detail(p){
+ const it=(p.items||[]).map(i=>`<tr><td>${E(i.name)}</td><td>${E(i.category)}</td><td>${i.qty}</td><td>${$m(i.price)}</td><td>${$m(i.price*i.qty)}</td></tr>`);
+ let a='';
+ if(p.status==='pending_approval')a=`<div class="fr" style="margin-top:12px"><button class="ok2" onclick="act(${p.id},'approve')">Approve purchase</button><button class="al" onclick="act(${p.id},'reject')">Reject</button></div>`;
+ if(p.status==='awaiting_payment'&&p.approve_url)a=`<div style="margin-top:12px"><a class="bt2" href="${E(p.approve_url)}">Continue to PayPal checkout</a></div>`;
+ return pn('Transaction #'+p.id,`<dl class="dl"><dt>Request</dt><dd>${E(p.request)}</dd><dt>Agent response</dt><dd>${E(p.agent_message||'-')}</dd><dt>Policy decision</dt><dd>${bg(p.verdict)} ${E((p.reasons||[]).join('. '))}</dd><dt>Status</dt><dd>${E(ST[p.status]||p.status)}</dd><dt>PayPal order</dt><dd class="mono">${E(p.order_id||'-')}</dd><dt>Total</dt><dd><b>${p.total?$m(p.total):'-'}</b></dd></dl>`+(it.length?'<div style="margin-top:12px">'+tb(['Item','Category','Qty','Unit price','Line total'],it,'')+'</div>':'')+a);
 }
-async function load(){
-  const [ps,au]=await Promise.all([fetch('/api/purchases').then(r=>r.json()),fetch('/api/audit').then(r=>r.json())]);
-  $('#hist').innerHTML=ps.map(p=>`<tr><td>${p.id}</td><td>${esc(p.request)}</td><td>${p.total?money(p.total):'-'}</td><td><span class="badge ${cls[p.verdict]||'mut'}">${label[p.verdict]||'-'}</span></td><td>${esc(st[p.status]||p.status)}</td></tr>`).join('');
-  $('#audit').innerHTML=au.map(a=>`<tr><td>${esc(a.ts)}</td><td>${a.purchase_id}</td><td>${esc(a.event)}</td><td>${esc(a.detail)}</td></tr>`).join('');
+const V={
+overview(){
+ const pd=P.filter(p=>p.status==='paid'),vol=pd.reduce((a,p)=>a+p.total,0),n=v=>P.filter(p=>p.verdict===v).length,sp=C.spent_today,b=C.policy.daily_budget;
+ return hd('Executive Overview','Position across the most recent 20 requests')+`<div class="kg">${kp('Requests',P.length,'Latest 20')}${kp('Settled volume',$m(vol),pd.length+' paid orders')}${kp('Awaiting approval',P.filter(p=>p.status==='pending_approval').length,'Human decision required')}${kp('Denied by policy',n('deny'),'Stopped before payment')}</div>`+
+ pn('Daily spend against budget',`<div class="mt" role="progressbar" aria-valuenow="${sp}" aria-valuemin="0" aria-valuemax="${b}"><div style="width:${Math.min(100,sp/b*100)}%"></div></div><p class="ms">${$m(sp)} of ${$m(b)} settled today (UTC)</p>`)+
+ pn('Policy outcomes',P.length?bars([['Auto-approved',n('allow')],['Human review',n('needs_approval')],['Denied',n('deny')],['No match',n('none')]]):'<div class="em">No requests yet. Create one under Transaction Management.</div>')+
+ pn('Recent transactions',txt(P.slice(0,5),'No transactions yet.'));},
+agents(){
+ const ae=A.filter(a=>a.event==='agent_error').length;
+ return hd('Agent Management','The shopping agent proposes carts. It never approves or pays; policy and people do.')+`<div class="kg">${kp('Provider',C.agent.provider,'LLM inference')}${kp('Model','<span style="font-size:16px">'+E(C.agent.model)+'</span>','Structured JSON output')}${kp('Catalog size',C.catalog.length,'Products the agent may select')}${kp('Agent errors',ae,'Within latest 40 audit events')}</div>`+
+ pn('Agent authority',`<dl class="dl"><dt>Can do</dt><dd>Read the catalog and propose items with quantities</dd><dt>Cannot do</dt><dd>Approve its own cart, change policy, or initiate payment before a policy verdict</dd><dt>Output validation</dt><dd>Items outside the catalog are discarded; quantity limited to 1-10 per line</dd></dl>`)+
+ pn('Product catalog available to the agent',tb(['ID','Name','Category','Price'],C.catalog.map(p=>`<tr><td class="mono">${E(p.id)}</td><td>${E(p.name)}</td><td>${E(p.category)}</td><td>${$m(p.price)}</td></tr>`),''));},
+tx(){
+ const ex=['Order a standing desk','Buy a keyboard and a mouse','Get me a $100 gift card','Furnish my office: desk, chair and monitor'];
+ return hd('Transaction Management','Submit a purchase request and follow it through policy, approval and PayPal')+
+ pn('New purchase request',`<form class="fr" onsubmit="send(event)"><label class="sr" for="msg" style="position:absolute;left:-9999px">Purchase request</label><input id="msg" placeholder="Describe what the agent should purchase" autocomplete="off"><button id="go" type="submit">Submit request</button></form><div class="ex">${ex.map(e=>`<button class="al sm" onclick="quick(this)">${E(e)}</button>`).join('')}</div>`)+
+ (cur?detail(cur):'')+pn('Transactions',txt(P,'No transactions yet. Submit a request above.'));},
+policy(){
+ const p=C.policy;
+ return hd('Policy Administration','Rules enforced on every cart before any payment is created')+
+ pn('Active rules',tb(['Rule','Setting','Effect'],[['Maximum order value',$m(p.max_order),'Deny'],['Human approval threshold',$m(p.approval_threshold),'Orders above this wait for a reviewer'],['Daily budget',$m(p.daily_budget),'Deny if settled spend plus this order exceeds it'],['Blocked categories',E(p.blocked_categories.join(', ')),'Deny']].map(r=>`<tr><td>${r[0]}</td><td><b>${r[1]}</b></td><td>${r[2]}</td></tr>`),''))+
+ pn('Change control','<p style="margin:0">Policy values are defined in the deployed application (<span class="mono">policy.py</span>) and are read-only here. Every decision is recorded in the audit log with the rule that applied.</p>');},
+approvals(){
+ const q=P.filter(p=>p.status==='pending_approval'),h=A.filter(a=>/^human_/.test(a.event));
+ return hd('Approval Management','Orders above the approval threshold wait here for a human decision')+
+ pn('Pending approvals ('+q.length+')',q.length?q.map(p=>`<div style="border-bottom:1px solid var(--ln);padding:10px 0"><b>#${p.id} ${$m(p.total)}</b> ${E(p.request)}<br><span style="color:var(--mu)">${E((p.reasons||[]).join('. '))}</span><div class="fr" style="margin-top:8px"><button class="ok2 sm" onclick="act(${p.id},'approve')">Approve</button><button class="al sm" onclick="act(${p.id},'reject')">Reject</button><button class="al sm" onclick="view(${p.id})">Details</button></div></div>`).join(''):'<div class="em">No orders are waiting for approval.</div>')+
+ pn('Decision history',tb(['Time (UTC)','Purchase','Decision'],h.map(a=>`<tr><td>${E(a.ts)}</td><td>#${a.purchase_id}</td><td>${a.event==='human_approved'?'<span class="b ok">Approved</span>':'<span class="b bad">Rejected</span>'}</td></tr>`),'No human decisions recorded yet.'));},
+risk(){
+ const d=P.filter(p=>p.verdict==='deny'||p.verdict==='needs_approval'),g={};
+ d.forEach(p=>(p.reasons||[]).forEach(r=>{const k=cat(r);g[k]=(g[k]||0)+1}));
+ const hr=P.filter(p=>p.items&&p.items.length).length;
+ return hd('Risk & Compliance','Policy interventions across the most recent 20 requests')+`<div class="kg">${kp('Interventions',d.length,'Denied or sent to review')}${kp('Human review rate',hr?Math.round(P.filter(p=>p.verdict==='needs_approval').length/hr*100)+'%':'-',hr+' requests with a cart')}</div>`+
+ pn('Interventions by rule',Object.keys(g).length?bars(Object.entries(g)):'<div class="em">No policy interventions yet.</div>')+
+ pn('Flagged transactions',tb(['ID','Request','Amount','Outcome','Reason'],d.map(p=>`<tr><td>#${p.id}</td><td>${E(p.request)}</td><td>${$m(p.total)}</td><td>${bg(p.verdict)}</td><td>${E((p.reasons||[]).join('. '))}</td></tr>`),'Nothing flagged.'));},
+audit(){
+ const ev=[...new Set(A.map(a=>a.event))];
+ return hd('Audit & Reporting','Append-only record of requests, decisions and payments (latest 40 events)')+
+ pn('Event log',`<div class="fr" style="margin-bottom:12px"><select id="fe" aria-label="Filter by event" onchange="F.e=this.value;da()"><option value="">All events</option>${ev.map(e=>`<option ${F.e===e?'selected':''}>${E(e)}</option>`).join('')}</select><input id="fq" aria-label="Search events" placeholder="Search detail" value="${E(F.q)}" oninput="F.q=this.value;da()"><button class="al" onclick="csv()">Export CSV</button></div><div id="at"></div>`);},
+admin(){
+ const y=C.payments,r=[['Payment provider',y.provider],['Payment environment',y.environment],['Settlement currency',y.currency],['PayPal credentials',y.paypal_configured?'Configured':'Missing'],['LLM credentials',y.llm_configured?'Configured':'Missing'],['Model',C.agent.model],['Server time (UTC)',C.server_time_utc],['Data store','SQLite on instance disk; may reset on redeploy on free hosting']];
+ return hd('System Administration','Runtime configuration. Secret values are never exposed.')+pn('Environment',tb(['Setting','Value'],r.map(x=>`<tr><td>${x[0]}</td><td>${E(x[1])}</td></tr>`),''));}
+};
+function da(){const e=$('#at');if(!e)return;const q=F.q.toLowerCase(),l=A.filter(a=>(!F.e||a.event===F.e)&&(!q||(a.detail||'').toLowerCase().includes(q)));e.innerHTML=tb(['Time (UTC)','Purchase','Event','Detail'],l.map(a=>`<tr><td>${E(a.ts)}</td><td>#${a.purchase_id}</td><td>${E(a.event)}</td><td>${E(a.detail)}</td></tr>`),'No events match.')}
+function csv(){const r=[['timestamp_utc','purchase_id','event','detail']].concat(A.map(a=>[a.ts,a.purchase_id,a.event,a.detail]));const t=r.map(x=>x.map(v=>'"'+String(v==null?'':v).replace(/"/g,'""')+'"').join(',')).join('\n');const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([t],{type:'text/csv'}));a.download='aegis-audit.csv';a.click()}
+function draw(){
+ const k=(location.hash||'#overview').slice(1),v=V[k]?k:'overview',pc=P.filter(p=>p.status==='pending_approval').length;
+ $('#nav').innerHTML='<div class="br0"><b>Aegis Pay</b><span>Commerce Governance Platform</span></div>'+NAV.map(n=>`<a href="#${n[0]}" ${n[0]===v?'aria-current="page"':''}>${n[1]}${n[0]==='approvals'&&pc?'<i>'+pc+'</i>':''}</a>`).join('');
+ const q=new URLSearchParams(location.search);let b='';
+ if(q.get('paid'))b='<div class="al2 ok">Payment captured through PayPal for transaction #'+E(q.get('paid'))+'.</div>';else if(q.get('msg'))b='<div class="al2 bad">'+E(q.get('msg'))+'</div>';
+ if(err){$('#main').innerHTML=pn('Unable to load data','<p>'+E(err)+'</p><button onclick="load()">Retry</button>');return}
+ if(!C){$('#main').innerHTML='<p>Loading...</p>';return}
+ $('#main').innerHTML=b+V[v]();if(v==='audit')da();
 }
-async function send(){
-  const m=$('#msg').value.trim();if(!m)return;
-  $('#go').disabled=true;$('#go').textContent='Thinking...';
-  try{
-    const r=await fetch('/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({message:m})});
-    const d=await r.json();
-    if(!r.ok){$('#current').innerHTML='<div class="card"><span class="badge bad">Error</span><p>'+esc(d.detail)+'</p></div>';}
-    else render(d);
-  }catch(e){$('#current').innerHTML='<div class="card"><span class="badge bad">Error</span><p>'+esc(e)+'</p></div>';}
-  $('#go').disabled=false;$('#go').textContent='Ask agent';load();
-}
-async function act(id,a){
-  const r=await fetch(`/api/purchases/${id}/${a}`,{method:'POST'});
-  const d=await r.json();if(r.ok)render(d);load();
-}
-$('#go').onclick=send;$('#msg').addEventListener('keydown',e=>{if(e.key==='Enter')send();});
-const q=new URLSearchParams(location.search);
-if(q.get('paid'))$('#banner').innerHTML='<div class="banner">Payment captured through PayPal for request #'+esc(q.get('paid'))+'.</div>';
-else if(q.get('msg'))$('#banner').innerHTML='<div class="banner err">'+esc(q.get('msg'))+'</div>';
-load();
+async function load(){try{[P,A,C]=await Promise.all([J('/api/purchases'),J('/api/audit'),J('/api/config')]);err=null}catch(e){err=String(e)}draw()}
+function view(id){cur=P.find(p=>p.id===id);location.hash='#tx';draw();window.scrollTo(0,0)}
+function quick(b){event.preventDefault();$('#msg').value=b.textContent;send()}
+async function send(e){if(e)e.preventDefault();const m=$('#msg').value.trim();if(!m)return;const g=$('#go');g.disabled=true;g.textContent='Processing...';
+ try{const r=await fetch('/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({message:m})});const d=await r.json();
+ if(!r.ok){err=null;cur={id:'-',request:m,agent_message:'Request failed: '+(d.detail||r.status),verdict:'none',status:'error',items:[],reasons:[]}}else cur=d}
+ catch(x){cur={id:'-',request:m,agent_message:String(x),verdict:'none',status:'error',items:[],reasons:[]}}
+ await load()}
+async function act(id,a){const r=await fetch('/api/purchases/'+id+'/'+a,{method:'POST'});const d=await r.json();if(r.ok)cur=d;await load()}
+addEventListener('hashchange',draw);load();
 </script></body></html>
