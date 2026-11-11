@@ -77,21 +77,21 @@ async def chat(body: Chat):
     return db.get(pid)
 
 @app.post("/api/purchases/{pid}/approve")
-async def approve(pid: int):
+async def approve(pid: int, reviewer: str = "reviewer"):
     p = db.get(pid)
     if not p or p["status"] != "pending_approval":
         raise HTTPException(400, "Not waiting for approval")
-    db.log(pid, "human_approved", "Approved by human reviewer")
+    db.log(pid, "human_approved", "Approved by " + reviewer[:60])
     await start_payment(pid)
     return db.get(pid)
 
 @app.post("/api/purchases/{pid}/reject")
-async def reject(pid: int):
+async def reject(pid: int, reviewer: str = "reviewer"):
     p = db.get(pid)
     if not p or p["status"] != "pending_approval":
         raise HTTPException(400, "Not waiting for approval")
     db.update(pid, status="rejected")
-    db.log(pid, "human_rejected", "Rejected by human reviewer")
+    db.log(pid, "human_rejected", "Rejected by " + reviewer[:60])
     return db.get(pid)
 
 @app.get("/api/purchases")

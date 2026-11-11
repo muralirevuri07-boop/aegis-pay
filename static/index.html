@@ -119,7 +119,7 @@ async function send(e){if(e)e.preventDefault();const m=$('#msg').value.trim();if
  if(!r.ok){err=null;cur={id:'-',request:m,agent_message:'Request failed: '+(d.detail||r.status),verdict:'none',status:'error',items:[],reasons:[]}}else cur=d}
  catch(x){cur={id:'-',request:m,agent_message:String(x),verdict:'none',status:'error',items:[],reasons:[]}}
  await load()}
-async function act(id,a){const r=await fetch('/api/purchases/'+id+'/'+a,{method:'POST'});const d=await r.json();if(r.ok)cur=d;await load()}
+async function act(id,a){const n=prompt('Reviewer name (recorded in the audit log):','');if(n===null)return;const r=await fetch('/api/purchases/'+id+'/'+a+'?reviewer='+encodeURIComponent(n.trim()||'reviewer'),{method:'POST'});const d=await r.json();if(r.ok)cur=d;await load()}
 async function demo(b){b.disabled=true;b.textContent='Running 3 requests...';try{await fetch('/api/demo',{method:'POST'})}catch(e){}await load()}
 addEventListener('hashchange',draw);load();
 </script></body></html>
